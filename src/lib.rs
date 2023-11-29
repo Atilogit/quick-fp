@@ -42,33 +42,6 @@ where
     }
 }
 
-// impl<F> From<f64> for Float<F>
-// where
-//     F: Clone,
-// {
-//     fn from(f: f64) -> Self {
-//         Self(f)
-//     }
-// }
-
-// impl<F> From<Float<F>> for f64
-// where
-//     F: Clone,
-// {
-//     fn from(f: Float<F>) -> Self {
-//         f.0
-//     }
-// }
-
-// impl<F> From<Float<F>> for f32
-// where
-//     F: Clone,
-// {
-//     fn from(f: Float<F>) -> Self {
-//         f.0 as Self
-//     }
-// }
-
 impl<F, T> std::cmp::PartialEq<T> for Float<F>
 where
     F: Clone + PartialEq + ::num_traits::NumCast,
@@ -101,5 +74,15 @@ where
 {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.partial_cmp(other).unwrap()
+    }
+}
+
+#[allow(clippy::fallible_impl_from)]
+impl<T> From<T> for Float<T>
+where
+    T: ::num_traits::NumCast + Clone,
+{
+    fn from(value: T) -> Self {
+        ::num_traits::cast(value).unwrap()
     }
 }
