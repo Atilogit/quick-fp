@@ -5,9 +5,42 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+optional = true
+
+[dependencies.nalgebra]
+version = "0.32"
+optional = true
+
+[dependencies.num-traits]
+version = "0.2"
+optional = true
+
+[dependencies.approx]
+version = "0.5"
+optional = true
+
+[dependencies.simba]
+version = "0.8"
+optional = true
+
+[dependencies.fast-math]
+version = "0.1"
+optional = true
+
 [dependencies]
-serde = { version = "1.0", features = ["derive"] }
-nalgebra = "0.32"
-num-traits = "0.2"
-approx = "0.5"
-simba = "0.8"
+cfg-if = "1.0"
+
+[features]
+default = ["ord", "eq", "serde", "nalgebra"]
+ord = []
+eq = []
+serde = ["dep:serde"]
+nalgebra = ["dep:nalgebra", "num_traits", "approx", "simba"]
+num_traits = ["dep:num-traits"]
+approx = ["dep:approx"]
+simba = ["dep:simba"]
+fast_math = ["dep:fast-math"]
+nightly = []
