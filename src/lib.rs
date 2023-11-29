@@ -45,6 +45,12 @@ impl From<Float> for f64 {
     }
 }
 
+impl From<Float> for f32 {
+    fn from(f: Float) -> Self {
+        f.0 as Self
+    }
+}
+
 #[cfg(feature = "num_traits")]
 impl<T: ::num_traits::ToPrimitive> std::cmp::PartialEq<T> for Float {
     fn eq(&self, other: &T) -> bool {

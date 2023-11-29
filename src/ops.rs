@@ -109,3 +109,61 @@ impl std::ops::Neg for Float {
         self * Self(-1.)
     }
 }
+
+#[allow(clippy::same_name_method)]
+impl Float {
+    #[must_use]
+    pub fn atan(self) -> Self {
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(fast_math::atan(self.into()).into())
+            } else {
+                Self(self.0.atan())
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn atan2(self, rhs: Self) -> Self {
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(fast_math::atan2(self.into(), rhs.into()).into())
+            } else {
+                Self(self.0.atan2(rhs.0))
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn exp(self) -> Self {
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(fast_math::exp(self.into()).into())
+            } else {
+                Self(self.0.exp())
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn exp2(self) -> Self {
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(fast_math::exp2(self.into()).into())
+            } else {
+                Self(self.0.exp2())
+            }
+        }
+    }
+
+    #[must_use]
+    pub fn log2(self) -> Self {
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(fast_math::log2(self.into()).into())
+            } else {
+                Self(self.0.log2())
+            }
+        }
+    }
+}

@@ -147,11 +147,11 @@ impl num_traits::Float for Float {
     }
 
     fn exp(self) -> Self {
-        f64::exp(self.0).into()
+        self.exp()
     }
 
     fn exp2(self) -> Self {
-        f64::exp2(self.0).into()
+        self.exp2()
     }
 
     fn ln(self) -> Self {
@@ -163,7 +163,7 @@ impl num_traits::Float for Float {
     }
 
     fn log2(self) -> Self {
-        f64::log2(self.0).into()
+        self.log2()
     }
 
     fn log10(self) -> Self {
@@ -212,11 +212,11 @@ impl num_traits::Float for Float {
     }
 
     fn atan(self) -> Self {
-        f64::atan(self.0).into()
+        self.atan()
     }
 
     fn atan2(self, other: Self) -> Self {
-        f64::atan2(self.0, other.0).into()
+        self.atan2(other)
     }
 
     fn sin_cos(self) -> (Self, Self) {
