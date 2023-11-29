@@ -1,6 +1,6 @@
 use crate::Float;
 
-impl simba::scalar::SubsetOf<f64> for Float {
+impl simba::scalar::SubsetOf<f64> for Float<f64> {
     fn to_superset(&self) -> f64 {
         self.0
     }
@@ -14,21 +14,21 @@ impl simba::scalar::SubsetOf<f64> for Float {
     }
 }
 
-impl simba::scalar::SubsetOf<Float> for f64 {
-    fn to_superset(&self) -> Float {
+impl simba::scalar::SubsetOf<Float<Self>> for f64 {
+    fn to_superset(&self) -> Float<Self> {
         Float(*self)
     }
 
-    fn from_superset_unchecked(superset: &Float) -> Self {
+    fn from_superset_unchecked(superset: &Float<Self>) -> Self {
         superset.0
     }
 
-    fn is_in_subset(_superset: &Float) -> bool {
+    fn is_in_subset(_superset: &Float<Self>) -> bool {
         true
     }
 }
 
-impl simba::scalar::SubsetOf<Self> for Float {
+impl simba::scalar::SubsetOf<Self> for Float<f64> {
     fn to_superset(&self) -> Self {
         *self
     }

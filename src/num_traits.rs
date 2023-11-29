@@ -1,33 +1,48 @@
 use crate::Float;
 
-impl num_traits::identities::Zero for Float {
+impl<F> num_traits::Zero for Float<F>
+where
+    F: Copy + PartialEq + num_traits::Zero,
+{
     fn zero() -> Self {
-        Self(0.0)
+        Self(F::zero())
     }
 
     fn is_zero(&self) -> bool {
-        self.0 == 0f64
+        self.0.is_zero()
     }
 }
 
-impl num_traits::identities::One for Float {
+impl<F> num_traits::identities::One for Float<F>
+where
+    F: Copy + num_traits::One,
+{
     fn one() -> Self {
-        Self(1.0)
+        Self(F::one())
     }
 }
 
-impl num_traits::Signed for Float {
+impl<F> num_traits::Signed for Float<F>
+where
+    F: num_traits::ToPrimitive
+        + Copy
+        + PartialEq
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Signed
+        + num_traits::NumCast,
+{
     fn abs(&self) -> Self {
-        self.0.abs().into()
+        Self(self.0.abs())
     }
 
     #[allow(deprecated)]
     fn abs_sub(&self, other: &Self) -> Self {
-        self.0.abs_sub(other.0).into()
+        Self(self.0.abs_sub(&other.0))
     }
 
     fn signum(&self) -> Self {
-        self.0.signum().into()
+        Self(self.0.signum())
     }
 
     #[allow(deprecated)]
@@ -41,89 +56,97 @@ impl num_traits::Signed for Float {
     }
 }
 
-impl num_traits::Float for Float {
+impl<F> num_traits::Float for Float<F>
+where
+    F: Copy
+        + num_traits::ToPrimitive
+        + PartialEq
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Float,
+{
     fn nan() -> Self {
-        f64::nan().into()
+        Self(F::nan())
     }
 
     fn infinity() -> Self {
-        f64::infinity().into()
+        Self(F::infinity())
     }
 
     fn neg_infinity() -> Self {
-        f64::neg_infinity().into()
+        Self(F::neg_infinity())
     }
 
     fn neg_zero() -> Self {
-        f64::neg_zero().into()
+        Self(F::neg_zero())
     }
 
     fn min_value() -> Self {
-        f64::min_value().into()
+        Self(F::min_value())
     }
 
     fn min_positive_value() -> Self {
-        f64::min_positive_value().into()
+        Self(F::min_positive_value())
     }
 
     fn max_value() -> Self {
-        f64::max_value().into()
+        Self(F::max_value())
     }
 
     fn is_nan(self) -> bool {
-        f64::is_nan(self.0)
+        F::is_nan(self.0)
     }
 
     fn is_infinite(self) -> bool {
-        f64::is_infinite(self.0)
+        F::is_infinite(self.0)
     }
 
     fn is_finite(self) -> bool {
-        f64::is_finite(self.0)
+        F::is_finite(self.0)
     }
 
     fn is_normal(self) -> bool {
-        f64::is_normal(self.0)
+        F::is_normal(self.0)
     }
 
     fn classify(self) -> std::num::FpCategory {
-        f64::classify(self.0)
+        F::classify(self.0)
     }
 
     fn floor(self) -> Self {
-        f64::floor(self.0).into()
+        Self(F::floor(self.0))
     }
 
     fn ceil(self) -> Self {
-        f64::ceil(self.0).into()
+        Self(F::ceil(self.0))
     }
 
     fn round(self) -> Self {
-        f64::round(self.0).into()
+        Self(F::round(self.0))
     }
 
     fn trunc(self) -> Self {
-        f64::trunc(self.0).into()
+        Self(F::trunc(self.0))
     }
 
     fn fract(self) -> Self {
-        f64::fract(self.0).into()
+        Self(F::fract(self.0))
     }
 
     fn abs(self) -> Self {
-        f64::abs(self.0).into()
+        Self(F::abs(self.0))
     }
 
     fn signum(self) -> Self {
-        f64::signum(self.0).into()
+        Self(F::signum(self.0))
     }
 
     fn is_sign_positive(self) -> bool {
-        f64::is_sign_positive(self.0)
+        F::is_sign_positive(self.0)
     }
 
     fn is_sign_negative(self) -> bool {
-        f64::is_sign_negative(self.0)
+        F::is_sign_negative(self.0)
     }
 
     fn mul_add(self, a: Self, b: Self) -> Self {
@@ -131,262 +154,286 @@ impl num_traits::Float for Float {
     }
 
     fn recip(self) -> Self {
-        Self(1.) / self
+        Self(F::one()) / self
     }
 
     fn powi(self, n: i32) -> Self {
-        f64::powi(self.0, n).into()
+        Self(F::powi(self.0, n))
     }
 
     fn powf(self, n: Self) -> Self {
-        f64::powf(self.0, n.0).into()
+        Self(F::powf(self.0, n.0))
     }
 
     fn sqrt(self) -> Self {
-        f64::sqrt(self.0).into()
+        Self(F::sqrt(self.0))
     }
 
+    #[allow(unconditional_recursion)]
     fn exp(self) -> Self {
         self.exp()
     }
 
+    #[allow(unconditional_recursion)]
     fn exp2(self) -> Self {
         self.exp2()
     }
 
     fn ln(self) -> Self {
-        f64::ln(self.0).into()
+        Self(F::ln(self.0))
     }
 
     fn log(self, base: Self) -> Self {
-        f64::log(self.0, base.0).into()
+        Self(F::log(self.0, base.0))
     }
 
+    #[allow(unconditional_recursion)]
     fn log2(self) -> Self {
         self.log2()
     }
 
     fn log10(self) -> Self {
-        f64::log10(self.0).into()
+        Self(F::log10(self.0))
     }
 
     fn max(self, other: Self) -> Self {
-        f64::max(self.0, other.0).into()
+        Self(F::max(self.0, other.0))
     }
 
     fn min(self, other: Self) -> Self {
-        f64::min(self.0, other.0).into()
+        Self(F::min(self.0, other.0))
     }
 
     fn abs_sub(self, other: Self) -> Self {
         #[allow(deprecated)]
-        f64::abs_sub(self.0, other.0).into()
+        Self(F::abs_sub(self.0, other.0))
     }
 
     fn cbrt(self) -> Self {
-        f64::cbrt(self.0).into()
+        Self(F::cbrt(self.0))
     }
 
     fn hypot(self, other: Self) -> Self {
-        f64::hypot(self.0, other.0).into()
+        Self(F::hypot(self.0, other.0))
     }
 
     fn sin(self) -> Self {
-        f64::sin(self.0).into()
+        Self(F::sin(self.0))
     }
 
     fn cos(self) -> Self {
-        f64::cos(self.0).into()
+        Self(F::cos(self.0))
     }
 
     fn tan(self) -> Self {
-        f64::tan(self.0).into()
+        Self(F::tan(self.0))
     }
 
     fn asin(self) -> Self {
-        f64::asin(self.0).into()
+        Self(F::asin(self.0))
     }
 
     fn acos(self) -> Self {
-        f64::acos(self.0).into()
+        Self(F::acos(self.0))
     }
 
+    #[allow(unconditional_recursion)]
     fn atan(self) -> Self {
         self.atan()
     }
 
+    #[allow(unconditional_recursion)]
+    #[allow(clippy::only_used_in_recursion)]
     fn atan2(self, other: Self) -> Self {
         self.atan2(other)
     }
 
     fn sin_cos(self) -> (Self, Self) {
-        let (a, b) = f64::sin_cos(self.0);
-        (a.into(), b.into())
+        let (a, b) = F::sin_cos(self.0);
+        (Self(a), Self(b))
     }
 
     fn exp_m1(self) -> Self {
-        f64::exp_m1(self.0).into()
+        Self(F::exp_m1(self.0))
     }
 
     fn ln_1p(self) -> Self {
-        f64::ln_1p(self.0).into()
+        Self(F::ln_1p(self.0))
     }
 
     fn sinh(self) -> Self {
-        f64::sinh(self.0).into()
+        Self(F::sinh(self.0))
     }
 
     fn cosh(self) -> Self {
-        f64::cosh(self.0).into()
+        Self(F::cosh(self.0))
     }
 
     fn tanh(self) -> Self {
-        f64::tanh(self.0).into()
+        Self(F::tanh(self.0))
     }
 
     fn asinh(self) -> Self {
-        f64::asinh(self.0).into()
+        Self(F::asinh(self.0))
     }
 
     fn acosh(self) -> Self {
-        f64::acosh(self.0).into()
+        Self(F::acosh(self.0))
     }
 
     fn atanh(self) -> Self {
-        f64::atanh(self.0).into()
+        Self(F::atanh(self.0))
     }
 
     fn integer_decode(self) -> (u64, i16, i8) {
-        f64::integer_decode(self.0)
+        F::integer_decode(self.0)
     }
 }
 
-impl num_traits::Num for Float {
-    type FromStrRadixErr = <f64 as num_traits::Num>::FromStrRadixErr;
+impl<F> num_traits::Num for Float<F>
+where
+    F: num_traits::ToPrimitive
+        + Copy
+        + PartialEq
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Num
+        + num_traits::NumCast,
+{
+    type FromStrRadixErr = <F as num_traits::Num>::FromStrRadixErr;
 
     fn from_str_radix(str: &str, radix: u32) -> Result<Self, Self::FromStrRadixErr> {
-        f64::from_str_radix(str, radix).map(Self)
+        F::from_str_radix(str, radix).map(Self)
     }
 }
 
-impl num_traits::NumCast for Float {
+impl<F> num_traits::NumCast for Float<F>
+where
+    F: num_traits::ToPrimitive + num_traits::NumCast + Clone,
+{
     fn from<T: num_traits::ToPrimitive>(n: T) -> Option<Self> {
         num_traits::NumCast::from(n).map(Self)
     }
 }
 
-impl num_traits::cast::ToPrimitive for Float {
+impl<F> num_traits::ToPrimitive for Float<F>
+where
+    F: num_traits::ToPrimitive + Clone,
+{
     fn to_i64(&self) -> Option<i64> {
-        f64::to_i64(&self.0)
+        F::to_i64(&self.0)
     }
 
     fn to_u64(&self) -> Option<u64> {
-        f64::to_u64(&self.0)
+        F::to_u64(&self.0)
     }
 
     fn to_isize(&self) -> Option<isize> {
-        f64::to_isize(&self.0)
+        F::to_isize(&self.0)
     }
 
     fn to_i8(&self) -> Option<i8> {
-        f64::to_i8(&self.0)
+        F::to_i8(&self.0)
     }
 
     fn to_i16(&self) -> Option<i16> {
-        f64::to_i16(&self.0)
+        F::to_i16(&self.0)
     }
 
     fn to_i32(&self) -> Option<i32> {
-        f64::to_i32(&self.0)
+        F::to_i32(&self.0)
     }
 
     fn to_i128(&self) -> Option<i128> {
-        f64::to_i128(&self.0)
+        F::to_i128(&self.0)
     }
 
     fn to_usize(&self) -> Option<usize> {
-        f64::to_usize(&self.0)
+        F::to_usize(&self.0)
     }
 
     fn to_u8(&self) -> Option<u8> {
-        f64::to_u8(&self.0)
+        F::to_u8(&self.0)
     }
 
     fn to_u16(&self) -> Option<u16> {
-        f64::to_u16(&self.0)
+        F::to_u16(&self.0)
     }
 
     fn to_u32(&self) -> Option<u32> {
-        f64::to_u32(&self.0)
+        F::to_u32(&self.0)
     }
 
     fn to_u128(&self) -> Option<u128> {
-        f64::to_u128(&self.0)
+        F::to_u128(&self.0)
     }
 
     fn to_f32(&self) -> Option<f32> {
-        f64::to_f32(&self.0)
+        F::to_f32(&self.0)
     }
 
     fn to_f64(&self) -> Option<f64> {
-        f64::to_f64(&self.0)
+        F::to_f64(&self.0)
     }
 }
 
-impl num_traits::cast::FromPrimitive for Float {
+impl<F> num_traits::FromPrimitive for Float<F>
+where
+    F: num_traits::FromPrimitive + Clone,
+{
     fn from_i64(n: i64) -> Option<Self> {
-        f64::from_i64(n).map(Self)
+        F::from_i64(n).map(Self)
     }
 
     fn from_u64(n: u64) -> Option<Self> {
-        f64::from_u64(n).map(Self)
+        F::from_u64(n).map(Self)
     }
 
     fn from_isize(n: isize) -> Option<Self> {
-        f64::from_isize(n).map(Self)
+        F::from_isize(n).map(Self)
     }
 
     fn from_i8(n: i8) -> Option<Self> {
-        f64::from_i8(n).map(Self)
+        F::from_i8(n).map(Self)
     }
 
     fn from_i16(n: i16) -> Option<Self> {
-        f64::from_i16(n).map(Self)
+        F::from_i16(n).map(Self)
     }
 
     fn from_i32(n: i32) -> Option<Self> {
-        f64::from_i32(n).map(Self)
+        F::from_i32(n).map(Self)
     }
 
     fn from_i128(n: i128) -> Option<Self> {
-        f64::from_i128(n).map(Self)
+        F::from_i128(n).map(Self)
     }
 
     fn from_usize(n: usize) -> Option<Self> {
-        f64::from_usize(n).map(Self)
+        F::from_usize(n).map(Self)
     }
 
     fn from_u8(n: u8) -> Option<Self> {
-        f64::from_u8(n).map(Self)
+        F::from_u8(n).map(Self)
     }
 
     fn from_u16(n: u16) -> Option<Self> {
-        f64::from_u16(n).map(Self)
+        F::from_u16(n).map(Self)
     }
 
     fn from_u32(n: u32) -> Option<Self> {
-        f64::from_u32(n).map(Self)
+        F::from_u32(n).map(Self)
     }
 
     fn from_u128(n: u128) -> Option<Self> {
-        f64::from_u128(n).map(Self)
+        F::from_u128(n).map(Self)
     }
 
     fn from_f32(n: f32) -> Option<Self> {
-        f64::from_f32(n).map(Self)
+        F::from_f32(n).map(Self)
     }
 
     fn from_f64(n: f64) -> Option<Self> {
-        f64::from_f64(n).map(Self)
+        F::from_f64(n).map(Self)
     }
 }

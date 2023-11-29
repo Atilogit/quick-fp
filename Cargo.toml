@@ -34,7 +34,8 @@ optional = true
 cfg-if = "1.0"
 
 [features]
-default = ["ord", "eq", "serde", "nalgebra", "fast_math"]
+default = ["ord", "eq", "serde", "nalgebra", "fast_math", "nightly"]
+# default = ["ord", "eq", "serde", "nalgebra", "fast_math"]
 ord = []
 eq = []
 serde = ["dep:serde"]

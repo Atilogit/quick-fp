@@ -2,7 +2,10 @@ use nalgebra::{ComplexField, Field, RealField, SimdValue};
 
 use crate::Float;
 
-impl SimdValue for Float {
+impl<F> SimdValue for Float<F>
+where
+    F: Clone + Copy,
+{
     type Element = Self;
 
     type SimdBool = bool;
@@ -40,9 +43,38 @@ impl SimdValue for Float {
     }
 }
 
-impl Field for Float {}
+impl<F> Field for Float<F> where
+    F: num_traits::ToPrimitive
+        + Copy
+        + PartialEq
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Num
+        + num_traits::NumCast
+        + std::ops::Neg<Output = F>
+{
+}
 
-impl RealField for Float {
+impl<F> RealField for Float<F>
+where
+    F: 'static
+        + Send
+        + Sync
+        + Copy
+        + Clone
+        + approx::UlpsEq<Epsilon = F>
+        + approx::RelativeEq
+        + num_traits::ToPrimitive
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Signed
+        + num_traits::Float
+        + num_traits::FromPrimitive
+        + std::fmt::Debug
+        + std::fmt::Display,
+    Self: simba::scalar::SubsetOf<Self>,
+    f64: simba::scalar::SubsetOf<Self>,
+{
     fn is_sign_positive(&self) -> bool {
         <Self as num_traits::Float>::is_sign_positive(*self)
     }
@@ -80,67 +112,86 @@ impl RealField for Float {
     }
 
     fn pi() -> Self {
-        Self(f64::pi())
+        <Self as num_traits::NumCast>::from(f64::pi()).unwrap()
     }
 
     fn two_pi() -> Self {
-        Self(f64::two_pi())
+        <Self as num_traits::NumCast>::from(f64::two_pi()).unwrap()
     }
 
     fn frac_pi_2() -> Self {
-        Self(f64::frac_pi_2())
+        <Self as num_traits::NumCast>::from(f64::frac_pi_2()).unwrap()
     }
 
     fn frac_pi_3() -> Self {
-        Self(f64::frac_pi_3())
+        <Self as num_traits::NumCast>::from(f64::frac_pi_3()).unwrap()
     }
 
     fn frac_pi_4() -> Self {
-        Self(f64::frac_pi_4())
+        <Self as num_traits::NumCast>::from(f64::frac_pi_4()).unwrap()
     }
 
     fn frac_pi_6() -> Self {
-        Self(f64::frac_pi_6())
+        <Self as num_traits::NumCast>::from(f64::frac_pi_6()).unwrap()
     }
 
     fn frac_pi_8() -> Self {
-        Self(f64::frac_pi_8())
+        <Self as num_traits::NumCast>::from(f64::frac_pi_8()).unwrap()
     }
 
     fn frac_1_pi() -> Self {
-        Self(f64::frac_1_pi())
+        <Self as num_traits::NumCast>::from(f64::frac_1_pi()).unwrap()
     }
 
     fn frac_2_pi() -> Self {
-        Self(f64::frac_2_pi())
+        <Self as num_traits::NumCast>::from(f64::frac_2_pi()).unwrap()
     }
 
     fn frac_2_sqrt_pi() -> Self {
-        Self(f64::frac_2_sqrt_pi())
+        <Self as num_traits::NumCast>::from(f64::frac_2_sqrt_pi()).unwrap()
     }
 
     fn e() -> Self {
-        Self(f64::e())
+        <Self as num_traits::NumCast>::from(f64::e()).unwrap()
     }
 
     fn log2_e() -> Self {
-        Self(f64::log2_e())
+        <Self as num_traits::NumCast>::from(f64::log2_e()).unwrap()
     }
 
     fn log10_e() -> Self {
-        Self(f64::log10_e())
+        <Self as num_traits::NumCast>::from(f64::log10_e()).unwrap()
     }
 
     fn ln_2() -> Self {
-        Self(f64::ln_2())
+        <Self as num_traits::NumCast>::from(f64::ln_2()).unwrap()
     }
 
     fn ln_10() -> Self {
-        Self(f64::ln_10())
+        <Self as num_traits::NumCast>::from(f64::ln_10()).unwrap()
     }
 }
 
-impl ComplexField for Float {
+impl<F> ComplexField for Float<F>
+where
+    F: 'static
+        + Sync
+        + Copy
+        + Clone
+        + Send
+        + approx::UlpsEq<Epsilon = F>
+        + approx::RelativeEq
+        + num_traits::ToPrimitive
+        + num_traits::One
+        + num_traits::Zero
+        + num_traits::Signed
+        + num_traits::Float
+        + num_traits::FromPrimitive
+        + std::fmt::Debug
+        + std::fmt::Display,
+    Self: simba::scalar::SubsetOf<Self>,
+    f64: simba::scalar::SubsetOf<Self>,
+{
     type RealField = Self;
 
     fn from_real(re: Self::RealField) -> Self {
