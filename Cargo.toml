@@ -16,7 +16,6 @@ optional = true
 
 [dependencies.num-traits]
 version = "0.2"
-optional = true
 
 [dependencies.approx]
 version = "0.5"
@@ -39,8 +38,7 @@ default = ["ord", "eq", "serde", "nalgebra", "fast_math", "nightly"]
 ord = []
 eq = []
 serde = ["dep:serde"]
-nalgebra = ["dep:nalgebra", "num_traits", "approx", "simba"]
-num_traits = ["dep:num-traits"]
+nalgebra = ["dep:nalgebra", "approx", "simba"]
 approx = ["dep:approx"]
 simba = ["dep:simba"]
 fast_math = ["dep:fast-math"]

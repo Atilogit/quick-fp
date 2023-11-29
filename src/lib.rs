@@ -4,14 +4,12 @@
 mod approx;
 #[cfg(feature = "nalgebra")]
 mod nalgebra;
-#[cfg(feature = "num_traits")]
 mod num_traits;
 mod ops;
 #[cfg(feature = "simba")]
 mod simba;
 
 #[derive(Clone, Copy)]
-#[cfg_attr(not(feature = "num_traits"), derive(PartialEq, PartialOrd))]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[repr(transparent)]
@@ -71,7 +69,6 @@ where
 //     }
 // }
 
-#[cfg(feature = "num_traits")]
 impl<F, T> std::cmp::PartialEq<T> for Float<F>
 where
     F: Clone + PartialEq + ::num_traits::NumCast,
@@ -85,7 +82,6 @@ where
 #[cfg(feature = "eq")]
 impl<F> Eq for Float<F> where F: ::num_traits::NumCast + Clone + PartialEq {}
 
-#[cfg(feature = "num_traits")]
 impl<F, T> std::cmp::PartialOrd<T> for Float<F>
 where
     F: Clone + PartialOrd + ::num_traits::NumCast,
