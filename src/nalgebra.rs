@@ -370,3 +370,95 @@ where
         Some(<Self as num_traits::Float>::sqrt(self))
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[allow(clippy::default_numeric_fallback)]
+    fn test_type() {
+        let mut a: Float<f64> = 1.into();
+
+        Float::<f64>::lanes();
+        Float::<f64>::splat(a);
+        a.extract(0);
+        unsafe { a.extract_unchecked(0) };
+        a.replace(0, a);
+        unsafe { a.replace_unchecked(0, a) };
+        a.select(true, a);
+
+        <Float<f64> as RealField>::is_sign_positive(&a);
+        <Float<f64> as RealField>::is_sign_negative(&a);
+        <Float<f64> as RealField>::copysign(a, a);
+        <Float<f64> as RealField>::max(a, a);
+        <Float<f64> as RealField>::min(a, a);
+        <Float<f64> as RealField>::clamp(a, a, a);
+        <Float<f64> as RealField>::atan2(a, a);
+        <Float<f64> as RealField>::min_value();
+        <Float<f64> as RealField>::max_value();
+        <Float<f64> as RealField>::pi();
+        <Float<f64> as RealField>::two_pi();
+        <Float<f64> as RealField>::frac_pi_2();
+        <Float<f64> as RealField>::frac_pi_3();
+        <Float<f64> as RealField>::frac_pi_4();
+        <Float<f64> as RealField>::frac_pi_6();
+        <Float<f64> as RealField>::frac_pi_8();
+        <Float<f64> as RealField>::frac_1_pi();
+        <Float<f64> as RealField>::frac_2_pi();
+        <Float<f64> as RealField>::frac_2_sqrt_pi();
+        <Float<f64> as RealField>::e();
+        <Float<f64> as RealField>::log2_e();
+        <Float<f64> as RealField>::log10_e();
+        <Float<f64> as RealField>::ln_2();
+        <Float<f64> as RealField>::ln_10();
+
+        <Float<f64> as ComplexField>::from_real(a);
+        <Float<f64> as ComplexField>::real(a);
+        <Float<f64> as ComplexField>::imaginary(a);
+        <Float<f64> as ComplexField>::modulus(a);
+        <Float<f64> as ComplexField>::modulus_squared(a);
+        <Float<f64> as ComplexField>::argument(a);
+        <Float<f64> as ComplexField>::norm1(a);
+        <Float<f64> as ComplexField>::scale(a, a);
+        <Float<f64> as ComplexField>::unscale(a, a);
+        <Float<f64> as ComplexField>::floor(a);
+        <Float<f64> as ComplexField>::ceil(a);
+        <Float<f64> as ComplexField>::round(a);
+        <Float<f64> as ComplexField>::trunc(a);
+        <Float<f64> as ComplexField>::fract(a);
+        <Float<f64> as ComplexField>::mul_add(a, a, a);
+        <Float<f64> as ComplexField>::abs(a);
+        <Float<f64> as ComplexField>::hypot(a, a);
+        <Float<f64> as ComplexField>::recip(a);
+        <Float<f64> as ComplexField>::conjugate(a);
+        <Float<f64> as ComplexField>::sin(a);
+        <Float<f64> as ComplexField>::cos(a);
+        <Float<f64> as ComplexField>::sin_cos(a);
+        <Float<f64> as ComplexField>::tan(a);
+        <Float<f64> as ComplexField>::asin(a);
+        <Float<f64> as ComplexField>::acos(a);
+        <Float<f64> as ComplexField>::atan(a);
+        <Float<f64> as ComplexField>::sinh(a);
+        <Float<f64> as ComplexField>::cosh(a);
+        <Float<f64> as ComplexField>::tanh(a);
+        <Float<f64> as ComplexField>::asinh(a);
+        <Float<f64> as ComplexField>::acosh(a);
+        <Float<f64> as ComplexField>::atanh(a);
+        <Float<f64> as ComplexField>::log(a, a);
+        <Float<f64> as ComplexField>::log2(a);
+        <Float<f64> as ComplexField>::log10(a);
+        <Float<f64> as ComplexField>::ln(a);
+        <Float<f64> as ComplexField>::ln_1p(a);
+        <Float<f64> as ComplexField>::sqrt(a);
+        <Float<f64> as ComplexField>::exp(a);
+        <Float<f64> as ComplexField>::exp2(a);
+        <Float<f64> as ComplexField>::exp_m1(a);
+        <Float<f64> as ComplexField>::powi(a, 1);
+        <Float<f64> as ComplexField>::powf(a, a);
+        <Float<f64> as ComplexField>::powc(a, a);
+        <Float<f64> as ComplexField>::cbrt(a);
+        <Float<f64> as ComplexField>::is_finite(&a);
+        <Float<f64> as ComplexField>::try_sqrt(a);
+    }
+}

@@ -1,8 +1,10 @@
+use approx::{AbsDiffEq, RelativeEq, UlpsEq};
+
 use crate::Float;
 
-impl<F> approx::UlpsEq for Float<F>
+impl<F> UlpsEq for Float<F>
 where
-    F: approx::UlpsEq<Epsilon = F> + Clone + num_traits::NumCast,
+    F: UlpsEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     fn default_max_ulps() -> u32 {
         F::default_max_ulps()
@@ -13,9 +15,9 @@ where
     }
 }
 
-impl<F> approx::AbsDiffEq for Float<F>
+impl<F> AbsDiffEq for Float<F>
 where
-    F: approx::AbsDiffEq<Epsilon = F> + Clone + num_traits::NumCast,
+    F: AbsDiffEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     type Epsilon = Self;
 
@@ -28,9 +30,9 @@ where
     }
 }
 
-impl<F> approx::RelativeEq for Float<F>
+impl<F> RelativeEq for Float<F>
 where
-    F: approx::RelativeEq<Epsilon = F> + Clone + num_traits::NumCast,
+    F: RelativeEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     fn default_max_relative() -> Self::Epsilon {
         Self(F::default_max_relative())
@@ -43,5 +45,26 @@ where
         max_relative: Self::Epsilon,
     ) -> bool {
         F::relative_eq(&self.0, &other.0, epsilon.0, max_relative.0)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[allow(clippy::default_numeric_fallback)]
+    fn test_type() {
+        let a: Float<f64> = 1.into();
+        let b: Float<f64> = 1.into();
+
+        Float::<f64>::default_max_ulps();
+        Float::<f64>::ulps_eq(&a, &b, 1.into(), 1);
+
+        Float::<f64>::default_epsilon();
+        Float::<f64>::abs_diff_eq(&a, &b, 1.into());
+
+        Float::<f64>::default_max_relative();
+        Float::<f64>::relative_eq(&a, &b, 1.into(), 1.into());
     }
 }

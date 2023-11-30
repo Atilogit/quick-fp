@@ -420,3 +420,114 @@ where
         F::from_f64(n).map(Self)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[allow(clippy::default_numeric_fallback)]
+    fn test_type() {
+        let a: Float<f64> = 1.into();
+
+        <Float<f64> as num_traits::Zero>::zero();
+        <Float<f64> as num_traits::Zero>::is_zero(&a);
+
+        <Float<f64> as num_traits::One>::one();
+
+        <Float<f64> as num_traits::Signed>::abs(&a);
+        <Float<f64> as num_traits::Signed>::abs_sub(&a, &a);
+        <Float<f64> as num_traits::Signed>::signum(&a);
+        <Float<f64> as num_traits::Signed>::is_positive(&a);
+        <Float<f64> as num_traits::Signed>::is_negative(&a);
+
+        <Float<f64> as num_traits::Float>::nan();
+        <Float<f64> as num_traits::Float>::infinity();
+        <Float<f64> as num_traits::Float>::neg_infinity();
+        <Float<f64> as num_traits::Float>::neg_zero();
+        <Float<f64> as num_traits::Float>::min_value();
+        <Float<f64> as num_traits::Float>::min_positive_value();
+        <Float<f64> as num_traits::Float>::max_value();
+        <Float<f64> as num_traits::Float>::is_nan(a);
+        <Float<f64> as num_traits::Float>::is_infinite(a);
+        <Float<f64> as num_traits::Float>::is_finite(a);
+        <Float<f64> as num_traits::Float>::is_normal(a);
+        <Float<f64> as num_traits::Float>::classify(a);
+        <Float<f64> as num_traits::Float>::floor(a);
+        <Float<f64> as num_traits::Float>::ceil(a);
+        <Float<f64> as num_traits::Float>::round(a);
+        <Float<f64> as num_traits::Float>::trunc(a);
+        <Float<f64> as num_traits::Float>::fract(a);
+        <Float<f64> as num_traits::Float>::abs(a);
+        <Float<f64> as num_traits::Float>::signum(a);
+        <Float<f64> as num_traits::Float>::is_sign_positive(a);
+        <Float<f64> as num_traits::Float>::is_sign_negative(a);
+        <Float<f64> as num_traits::Float>::mul_add(a, a, a);
+        <Float<f64> as num_traits::Float>::recip(a);
+        <Float<f64> as num_traits::Float>::powi(a, 1);
+        <Float<f64> as num_traits::Float>::powf(a, a);
+        <Float<f64> as num_traits::Float>::sqrt(a);
+        <Float<f64> as num_traits::Float>::exp(a);
+        <Float<f64> as num_traits::Float>::exp2(a);
+        <Float<f64> as num_traits::Float>::ln(a);
+        <Float<f64> as num_traits::Float>::log(a, a);
+        <Float<f64> as num_traits::Float>::log2(a);
+        <Float<f64> as num_traits::Float>::log10(a);
+        <Float<f64> as num_traits::Float>::max(a, a);
+        <Float<f64> as num_traits::Float>::min(a, a);
+        <Float<f64> as num_traits::Float>::abs_sub(a, a);
+        <Float<f64> as num_traits::Float>::cbrt(a);
+        <Float<f64> as num_traits::Float>::hypot(a, a);
+        <Float<f64> as num_traits::Float>::sin(a);
+        <Float<f64> as num_traits::Float>::cos(a);
+        <Float<f64> as num_traits::Float>::tan(a);
+        <Float<f64> as num_traits::Float>::asin(a);
+        <Float<f64> as num_traits::Float>::acos(a);
+        <Float<f64> as num_traits::Float>::atan(a);
+        <Float<f64> as num_traits::Float>::atan2(a, a);
+        <Float<f64> as num_traits::Float>::sin_cos(a);
+        <Float<f64> as num_traits::Float>::exp_m1(a);
+        <Float<f64> as num_traits::Float>::ln_1p(a);
+        <Float<f64> as num_traits::Float>::sinh(a);
+        <Float<f64> as num_traits::Float>::cosh(a);
+        <Float<f64> as num_traits::Float>::tanh(a);
+        <Float<f64> as num_traits::Float>::asinh(a);
+        <Float<f64> as num_traits::Float>::acosh(a);
+        <Float<f64> as num_traits::Float>::atanh(a);
+        <Float<f64> as num_traits::Float>::integer_decode(a);
+
+        <Float<f64> as num_traits::Num>::from_str_radix("1", 10).unwrap();
+
+        <Float<f64> as num_traits::NumCast>::from(1);
+
+        <Float<f64> as num_traits::ToPrimitive>::to_i64(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_u64(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_isize(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_i8(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_i16(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_i32(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_i128(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_usize(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_u8(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_u16(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_u32(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_u128(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_f32(&a);
+        <Float<f64> as num_traits::ToPrimitive>::to_f64(&a);
+
+        <Float<f64> as num_traits::FromPrimitive>::from_i64(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_u64(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_isize(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_i8(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_i16(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_i32(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_i128(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_usize(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_u8(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_u16(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_u32(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_u128(1);
+        <Float<f64> as num_traits::FromPrimitive>::from_f32(1.);
+        <Float<f64> as num_traits::FromPrimitive>::from_f64(1.);
+    }
+}

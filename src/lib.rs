@@ -87,3 +87,32 @@ where
         num_traits::cast(value).unwrap()
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    #[allow(clippy::default_numeric_fallback)]
+    fn test_type() {
+        let a: Float<f64> = 1.into();
+        let b: Float<f32> = 1f32.into();
+        let c: Float<i64> = 1i32.into();
+
+        println!("{a:?} {a}");
+        println!("{b:?} {b}");
+        println!("{c:?} {c}");
+
+        assert_eq!(a, b);
+        assert_eq!(a, c);
+        assert_eq!(b, c);
+
+        assert!(a < Float(2f64));
+        assert!(b < Float(2f64));
+        assert!(c < Float(2f64));
+
+        assert!(a < Float(2i64));
+        assert!(b < Float(2i64));
+        assert!(c < Float(2i64));
+    }
+}

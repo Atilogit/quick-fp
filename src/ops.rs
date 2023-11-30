@@ -143,68 +143,32 @@ where
     }
 }
 
-#[allow(clippy::same_name_method)]
-impl<F> Float<F>
-where
-    F: From<f32> + Clone + num_traits::NumCast,
-{
-    #[must_use]
-    #[allow(clippy::missing_panics_doc)]
-    pub fn atan(self) -> Self {
-        cfg_if! {
-            if #[cfg(feature = "fast_math")] {
-                Self(fast_math::atan(num_traits::cast(self).unwrap()).into())
-            } else {
-                Self(self.0.atan())
-            }
-        }
-    }
+#[cfg(test)]
+mod test {
+    use super::*;
 
-    #[must_use]
-    #[allow(clippy::missing_panics_doc)]
-    pub fn atan2(self, rhs: Self) -> Self {
-        cfg_if! {
-            if #[cfg(feature = "fast_math")] {
-                Self(fast_math::atan2(num_traits::cast(self).unwrap(), num_traits::cast(rhs).unwrap()).into())
-            } else {
-                Self(self.0.atan2(rhs.0))
-            }
-        }
-    }
+    #[test]
+    #[allow(clippy::default_numeric_fallback)]
+    fn test_type() {
+        let a: Float<f64> = 1.into();
+        let b: Float<f64> = 2.into();
 
-    #[must_use]
-    #[allow(clippy::missing_panics_doc)]
-    pub fn exp(self) -> Self {
-        cfg_if! {
-            if #[cfg(feature = "fast_math")] {
-                Self(fast_math::exp(num_traits::cast(self).unwrap()).into())
-            } else {
-                Self(self.0.exp())
-            }
-        }
-    }
+        assert_eq!(a + b, 3);
+        assert_eq!(a - b, -1);
+        assert_eq!(a * b, 2);
+        assert_eq!(a / b, 0.5);
+        assert_eq!(a % b, 1);
 
-    #[must_use]
-    #[allow(clippy::missing_panics_doc)]
-    pub fn exp2(self) -> Self {
-        cfg_if! {
-            if #[cfg(feature = "fast_math")] {
-                Self(fast_math::exp2(num_traits::cast(self).unwrap()).into())
-            } else {
-                Self(self.0.exp2())
-            }
-        }
-    }
+        // assert_eq!(a + 2i64, 3);
+        // assert_eq!(a - 2i64, -1);
+        // assert_eq!(a * 2i64, 2);
+        // assert_eq!(a / 2i64, 0.5);
+        // assert_eq!(a % 2i64, 1);
 
-    #[must_use]
-    #[allow(clippy::missing_panics_doc)]
-    pub fn log2(self) -> Self {
-        cfg_if! {
-            if #[cfg(feature = "fast_math")] {
-                Self(fast_math::log2(num_traits::cast(self).unwrap()).into())
-            } else {
-                Self(self.0.log2())
-            }
-        }
+        // assert_eq!(1i64 + b, 3);
+        // assert_eq!(1i64 - b, -1);
+        // assert_eq!(1i64 * b, 2);
+        // assert_eq!(1i64 / b, 0.5);
+        // assert_eq!(1i64 % b, 1);
     }
 }
