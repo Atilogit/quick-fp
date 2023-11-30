@@ -1,3 +1,5 @@
+use cfg_if::cfg_if;
+
 use crate::Float;
 
 impl<F> num_traits::Zero for Float<F>
@@ -158,14 +160,24 @@ where
         Self(F::sqrt(self.0))
     }
 
-    #[allow(unconditional_recursion)]
     fn exp(self) -> Self {
-        self.exp()
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(num_traits::cast(fast_math::exp(num_traits::cast(self).unwrap())).unwrap())
+            } else {
+                Self(F::exp(self.0))
+            }
+        }
     }
 
-    #[allow(unconditional_recursion)]
     fn exp2(self) -> Self {
-        self.exp2()
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(num_traits::cast(fast_math::exp2(num_traits::cast(self).unwrap())).unwrap())
+            } else {
+                Self(F::exp2(self.0))
+            }
+        }
     }
 
     fn ln(self) -> Self {
@@ -176,9 +188,14 @@ where
         Self(F::log(self.0, base.0))
     }
 
-    #[allow(unconditional_recursion)]
     fn log2(self) -> Self {
-        self.log2()
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(num_traits::cast(fast_math::log2(num_traits::cast(self).unwrap())).unwrap())
+            } else {
+                Self(F::log2(self.0))
+            }
+        }
     }
 
     fn log10(self) -> Self {
@@ -226,15 +243,25 @@ where
         Self(F::acos(self.0))
     }
 
-    #[allow(unconditional_recursion)]
     fn atan(self) -> Self {
-        self.atan()
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                Self(num_traits::cast(fast_math::atan(num_traits::cast(self).unwrap())).unwrap())
+            } else {
+                Self(F::atan(self.0))
+            }
+        }
     }
 
-    #[allow(unconditional_recursion)]
-    #[allow(clippy::only_used_in_recursion)]
     fn atan2(self, other: Self) -> Self {
-        self.atan2(other)
+        cfg_if! {
+            if #[cfg(feature = "fast_math")] {
+                let other = num_traits::cast(other).unwrap();
+                Self(num_traits::cast(fast_math::atan2(num_traits::cast(self).unwrap(), other)).unwrap())
+            } else {
+                Self(F::atan2(self.0, other.0))
+            }
+        }
     }
 
     fn sin_cos(self) -> (Self, Self) {
