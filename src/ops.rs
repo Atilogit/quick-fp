@@ -4,7 +4,7 @@ use crate::Float;
 
 impl<F, T> std::ops::Add<T> for Float<F>
 where
-    F: Copy + num_traits::NumCast,
+    F: Copy + num_traits::NumCast + std::ops::Add<Output = F>,
     T: num_traits::NumCast,
 {
     type Output = Self;
@@ -27,6 +27,7 @@ macro_rules! add_rhs_impl {
         where
             F: Copy,
             F: num_traits::NumCast,
+            Float<F>: std::ops::Add<Output = Float<F>>,
         {
             type Output = Float<F>;
 
@@ -55,7 +56,7 @@ add_rhs_impl!(usize);
 
 impl<F, T> std::ops::Sub<T> for Float<F>
 where
-    F: Copy + num_traits::NumCast,
+    F: Copy + num_traits::NumCast + std::ops::Sub<Output = F>,
     T: num_traits::NumCast,
 {
     type Output = Self;
@@ -78,6 +79,7 @@ macro_rules! sub_rhs_impl {
         where
             F: Copy,
             F: num_traits::NumCast,
+            Float<F>: std::ops::Sub<Output = Float<F>>,
         {
             type Output = Float<F>;
 
@@ -106,7 +108,7 @@ sub_rhs_impl!(usize);
 
 impl<F, T> std::ops::Mul<T> for Float<F>
 where
-    F: Copy + num_traits::NumCast,
+    F: Copy + num_traits::NumCast + std::ops::Mul<Output = F>,
     T: num_traits::NumCast,
 {
     type Output = Self;
@@ -129,6 +131,7 @@ macro_rules! mul_rhs_impl {
         where
             F: Copy,
             F: num_traits::NumCast,
+            Float<F>: std::ops::Mul<Output = Float<F>>,
         {
             type Output = Float<F>;
 
@@ -157,7 +160,7 @@ mul_rhs_impl!(usize);
 
 impl<F, T> std::ops::Div<T> for Float<F>
 where
-    F: Copy + num_traits::NumCast,
+    F: Copy + num_traits::NumCast + std::ops::Div<Output = F>,
     T: num_traits::NumCast,
 {
     type Output = Self;
@@ -180,6 +183,7 @@ macro_rules! div_rhs_impl {
         where
             F: Copy,
             F: num_traits::NumCast,
+            Float<F>: std::ops::Div<Output = Float<F>>,
         {
             type Output = Float<F>;
 
@@ -208,7 +212,7 @@ div_rhs_impl!(usize);
 
 impl<F, T> std::ops::Rem<T> for Float<F>
 where
-    F: Copy + num_traits::NumCast,
+    F: Copy + num_traits::NumCast + std::ops::Rem<Output = F>,
     T: num_traits::NumCast,
 {
     type Output = Self;
@@ -231,6 +235,7 @@ macro_rules! rem_rhs_impl {
         where
             F: Copy,
             F: num_traits::NumCast,
+            Float<F>: std::ops::Rem<Output = Float<F>>,
         {
             type Output = Float<F>;
 
@@ -261,6 +266,7 @@ impl<F, T> std::ops::AddAssign<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
     T: num_traits::NumCast,
+    Self: std::ops::Add<T, Output = Self>,
 {
     fn add_assign(&mut self, rhs: T) {
         *self = *self + rhs;
@@ -271,6 +277,7 @@ impl<F, T> std::ops::SubAssign<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
     T: num_traits::NumCast,
+    Self: std::ops::Sub<T, Output = Self>,
 {
     fn sub_assign(&mut self, rhs: T) {
         *self = *self - rhs;
@@ -281,6 +288,7 @@ impl<F, T> std::ops::MulAssign<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
     T: num_traits::NumCast,
+    Self: std::ops::Mul<T, Output = Self>,
 {
     fn mul_assign(&mut self, rhs: T) {
         *self = *self * rhs;
@@ -291,6 +299,7 @@ impl<F, T> std::ops::DivAssign<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
     T: num_traits::NumCast,
+    Self: std::ops::Div<T, Output = Self>,
 {
     fn div_assign(&mut self, rhs: T) {
         *self = *self / rhs;
@@ -301,6 +310,7 @@ impl<F, T> std::ops::RemAssign<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
     T: num_traits::NumCast,
+    Self: std::ops::Rem<T, Output = Self>,
 {
     fn rem_assign(&mut self, rhs: T) {
         *self = *self % rhs;
