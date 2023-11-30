@@ -4,7 +4,7 @@ use crate::Float;
 
 impl<F> num_traits::Zero for Float<F>
 where
-    F: Copy + PartialEq + num_traits::Zero,
+    F: Copy + PartialEq + num_traits::Zero + num_traits::NumCast,
 {
     fn zero() -> Self {
         Self(F::zero())
@@ -17,7 +17,7 @@ where
 
 impl<F> num_traits::One for Float<F>
 where
-    F: Copy + num_traits::One,
+    F: Copy + num_traits::One + num_traits::NumCast,
 {
     fn one() -> Self {
         Self(F::one())

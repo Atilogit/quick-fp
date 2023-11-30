@@ -2,13 +2,15 @@ use cfg_if::cfg_if;
 
 use crate::Float;
 
-impl<F> std::ops::Add for Float<F>
+impl<F, T> std::ops::Add<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
     type Output = Self;
 
-    fn add(self, rhs: Self) -> Self::Output {
+    fn add(self, rhs: T) -> Self::Output {
+        let rhs: Self = num_traits::cast(rhs).unwrap();
         cfg_if! {
             if #[cfg(feature = "nightly")] {
                 Self(unsafe { std::intrinsics::fadd_fast(self.0, rhs.0) })
@@ -19,13 +21,15 @@ where
     }
 }
 
-impl<F> std::ops::Sub for Float<F>
+impl<F, T> std::ops::Sub<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
     type Output = Self;
 
-    fn sub(self, rhs: Self) -> Self::Output {
+    fn sub(self, rhs: T) -> Self::Output {
+        let rhs: Self = num_traits::cast(rhs).unwrap();
         cfg_if! {
             if #[cfg(feature = "nightly")] {
                 Self(unsafe { std::intrinsics::fsub_fast(self.0, rhs.0) })
@@ -36,13 +40,15 @@ where
     }
 }
 
-impl<F> std::ops::Mul for Float<F>
+impl<F, T> std::ops::Mul<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
     type Output = Self;
 
-    fn mul(self, rhs: Self) -> Self::Output {
+    fn mul(self, rhs: T) -> Self::Output {
+        let rhs: Self = num_traits::cast(rhs).unwrap();
         cfg_if! {
             if #[cfg(feature = "nightly")] {
                 Self(unsafe { std::intrinsics::fmul_fast(self.0, rhs.0) })
@@ -53,13 +59,15 @@ where
     }
 }
 
-impl<F> std::ops::Div for Float<F>
+impl<F, T> std::ops::Div<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
     type Output = Self;
 
-    fn div(self, rhs: Self) -> Self::Output {
+    fn div(self, rhs: T) -> Self::Output {
+        let rhs: Self = num_traits::cast(rhs).unwrap();
         cfg_if! {
             if #[cfg(feature = "nightly")] {
                 Self(unsafe { std::intrinsics::fdiv_fast(self.0, rhs.0) })
@@ -70,13 +78,15 @@ where
     }
 }
 
-impl<F> std::ops::Rem for Float<F>
+impl<F, T> std::ops::Rem<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
     type Output = Self;
 
-    fn rem(self, rhs: Self) -> Self::Output {
+    fn rem(self, rhs: T) -> Self::Output {
+        let rhs: Self = num_traits::cast(rhs).unwrap();
         cfg_if! {
             if #[cfg(feature = "nightly")] {
                 Self(unsafe { std::intrinsics::frem_fast(self.0, rhs.0) })
@@ -87,54 +97,59 @@ where
     }
 }
 
-impl<F> std::ops::AddAssign for Float<F>
+impl<F, T> std::ops::AddAssign<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
-    fn add_assign(&mut self, rhs: Self) {
+    fn add_assign(&mut self, rhs: T) {
         *self = *self + rhs;
     }
 }
 
-impl<F> std::ops::SubAssign for Float<F>
+impl<F, T> std::ops::SubAssign<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
-    fn sub_assign(&mut self, rhs: Self) {
+    fn sub_assign(&mut self, rhs: T) {
         *self = *self - rhs;
     }
 }
 
-impl<F> std::ops::MulAssign for Float<F>
+impl<F, T> std::ops::MulAssign<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
-    fn mul_assign(&mut self, rhs: Self) {
+    fn mul_assign(&mut self, rhs: T) {
         *self = *self * rhs;
     }
 }
 
-impl<F> std::ops::DivAssign for Float<F>
+impl<F, T> std::ops::DivAssign<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
-    fn div_assign(&mut self, rhs: Self) {
+    fn div_assign(&mut self, rhs: T) {
         *self = *self / rhs;
     }
 }
 
-impl<F> std::ops::RemAssign for Float<F>
+impl<F, T> std::ops::RemAssign<T> for Float<F>
 where
-    F: Copy,
+    F: Copy + num_traits::NumCast,
+    T: num_traits::NumCast,
 {
-    fn rem_assign(&mut self, rhs: Self) {
+    fn rem_assign(&mut self, rhs: T) {
         *self = *self % rhs;
     }
 }
 
 impl<F> std::ops::Neg for Float<F>
 where
-    F: Copy + num_traits::One + std::ops::Neg<Output = F>,
+    F: Copy + num_traits::One + std::ops::Neg<Output = F> + num_traits::NumCast,
 {
     type Output = Self;
 
@@ -150,7 +165,7 @@ mod test {
     #[test]
     #[allow(clippy::default_numeric_fallback)]
     fn test_type() {
-        let a: Float<f64> = 1.into();
+        let mut a: Float<f64> = 1.into();
         let b: Float<f64> = 2.into();
 
         assert_eq!(a + b, 3);
@@ -159,16 +174,32 @@ mod test {
         assert_eq!(a / b, 0.5);
         assert_eq!(a % b, 1);
 
-        // assert_eq!(a + 2i64, 3);
-        // assert_eq!(a - 2i64, -1);
-        // assert_eq!(a * 2i64, 2);
-        // assert_eq!(a / 2i64, 0.5);
-        // assert_eq!(a % 2i64, 1);
+        assert_eq!(a + 2i64, 3);
+        assert_eq!(a - 2i64, -1);
+        assert_eq!(a * 2i64, 2);
+        assert_eq!(a / 2i64, 0.5);
+        assert_eq!(a % 2i64, 1);
 
-        // assert_eq!(1i64 + b, 3);
-        // assert_eq!(1i64 - b, -1);
-        // assert_eq!(1i64 * b, 2);
-        // assert_eq!(1i64 / b, 0.5);
-        // assert_eq!(1i64 % b, 1);
+        a += b;
+        assert_eq!(a, 3);
+        a -= b;
+        assert_eq!(a, 1);
+        a *= b;
+        assert_eq!(a, 2);
+        a /= b;
+        assert_eq!(a, 1);
+        a %= b;
+        assert_eq!(a, 1);
+
+        a += 2i64;
+        assert_eq!(a, 3);
+        a -= 2i64;
+        assert_eq!(a, 1);
+        a *= 2i64;
+        assert_eq!(a, 2);
+        a /= 2i64;
+        assert_eq!(a, 1);
+        a %= 2i64;
+        assert_eq!(a, 1);
     }
 }
