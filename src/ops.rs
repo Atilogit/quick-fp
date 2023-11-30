@@ -174,7 +174,6 @@ where
 
     #[must_use]
     #[allow(clippy::missing_panics_doc)]
-    #[allow(clippy::missing_panics_doc)]
     pub fn exp(self) -> Self {
         cfg_if! {
             if #[cfg(feature = "fast_math")] {
