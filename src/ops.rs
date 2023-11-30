@@ -21,6 +21,38 @@ where
     }
 }
 
+macro_rules! add_rhs_impl {
+    ($ty:ty) => {
+        impl<F> std::ops::Add<Float<F>> for $ty
+        where
+            F: Copy,
+            F: num_traits::NumCast,
+        {
+            type Output = Float<F>;
+
+            fn add(self, rhs: Float<F>) -> Self::Output {
+                let lhs: Float<F> = num_traits::cast(self).unwrap();
+                lhs + rhs
+            }
+        }
+    };
+}
+
+add_rhs_impl!(f32);
+add_rhs_impl!(f64);
+add_rhs_impl!(i8);
+add_rhs_impl!(i16);
+add_rhs_impl!(i32);
+add_rhs_impl!(i64);
+add_rhs_impl!(i128);
+add_rhs_impl!(isize);
+add_rhs_impl!(u8);
+add_rhs_impl!(u16);
+add_rhs_impl!(u32);
+add_rhs_impl!(u64);
+add_rhs_impl!(u128);
+add_rhs_impl!(usize);
+
 impl<F, T> std::ops::Sub<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
@@ -39,6 +71,38 @@ where
         }
     }
 }
+
+macro_rules! sub_rhs_impl {
+    ($ty:ty) => {
+        impl<F> std::ops::Sub<Float<F>> for $ty
+        where
+            F: Copy,
+            F: num_traits::NumCast,
+        {
+            type Output = Float<F>;
+
+            fn sub(self, rhs: Float<F>) -> Self::Output {
+                let lhs: Float<F> = num_traits::cast(self).unwrap();
+                lhs - rhs
+            }
+        }
+    };
+}
+
+sub_rhs_impl!(f32);
+sub_rhs_impl!(f64);
+sub_rhs_impl!(i8);
+sub_rhs_impl!(i16);
+sub_rhs_impl!(i32);
+sub_rhs_impl!(i64);
+sub_rhs_impl!(i128);
+sub_rhs_impl!(isize);
+sub_rhs_impl!(u8);
+sub_rhs_impl!(u16);
+sub_rhs_impl!(u32);
+sub_rhs_impl!(u64);
+sub_rhs_impl!(u128);
+sub_rhs_impl!(usize);
 
 impl<F, T> std::ops::Mul<T> for Float<F>
 where
@@ -59,6 +123,38 @@ where
     }
 }
 
+macro_rules! mul_rhs_impl {
+    ($ty:ty) => {
+        impl<F> std::ops::Mul<Float<F>> for $ty
+        where
+            F: Copy,
+            F: num_traits::NumCast,
+        {
+            type Output = Float<F>;
+
+            fn mul(self, rhs: Float<F>) -> Self::Output {
+                let lhs: Float<F> = num_traits::cast(self).unwrap();
+                lhs * rhs
+            }
+        }
+    };
+}
+
+mul_rhs_impl!(f32);
+mul_rhs_impl!(f64);
+mul_rhs_impl!(i8);
+mul_rhs_impl!(i16);
+mul_rhs_impl!(i32);
+mul_rhs_impl!(i64);
+mul_rhs_impl!(i128);
+mul_rhs_impl!(isize);
+mul_rhs_impl!(u8);
+mul_rhs_impl!(u16);
+mul_rhs_impl!(u32);
+mul_rhs_impl!(u64);
+mul_rhs_impl!(u128);
+mul_rhs_impl!(usize);
+
 impl<F, T> std::ops::Div<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
@@ -78,6 +174,38 @@ where
     }
 }
 
+macro_rules! div_rhs_impl {
+    ($ty:ty) => {
+        impl<F> std::ops::Div<Float<F>> for $ty
+        where
+            F: Copy,
+            F: num_traits::NumCast,
+        {
+            type Output = Float<F>;
+
+            fn div(self, rhs: Float<F>) -> Self::Output {
+                let lhs: Float<F> = num_traits::cast(self).unwrap();
+                lhs / rhs
+            }
+        }
+    };
+}
+
+div_rhs_impl!(f32);
+div_rhs_impl!(f64);
+div_rhs_impl!(i8);
+div_rhs_impl!(i16);
+div_rhs_impl!(i32);
+div_rhs_impl!(i64);
+div_rhs_impl!(i128);
+div_rhs_impl!(isize);
+div_rhs_impl!(u8);
+div_rhs_impl!(u16);
+div_rhs_impl!(u32);
+div_rhs_impl!(u64);
+div_rhs_impl!(u128);
+div_rhs_impl!(usize);
+
 impl<F, T> std::ops::Rem<T> for Float<F>
 where
     F: Copy + num_traits::NumCast,
@@ -96,6 +224,38 @@ where
         }
     }
 }
+
+macro_rules! rem_rhs_impl {
+    ($ty:ty) => {
+        impl<F> std::ops::Rem<Float<F>> for $ty
+        where
+            F: Copy,
+            F: num_traits::NumCast,
+        {
+            type Output = Float<F>;
+
+            fn rem(self, rhs: Float<F>) -> Self::Output {
+                let lhs: Float<F> = num_traits::cast(self).unwrap();
+                lhs % rhs
+            }
+        }
+    };
+}
+
+rem_rhs_impl!(f32);
+rem_rhs_impl!(f64);
+rem_rhs_impl!(i8);
+rem_rhs_impl!(i16);
+rem_rhs_impl!(i32);
+rem_rhs_impl!(i64);
+rem_rhs_impl!(i128);
+rem_rhs_impl!(isize);
+rem_rhs_impl!(u8);
+rem_rhs_impl!(u16);
+rem_rhs_impl!(u32);
+rem_rhs_impl!(u64);
+rem_rhs_impl!(u128);
+rem_rhs_impl!(usize);
 
 impl<F, T> std::ops::AddAssign<T> for Float<F>
 where
@@ -164,6 +324,7 @@ mod test {
 
     #[test]
     #[allow(clippy::default_numeric_fallback)]
+    #[allow(clippy::cognitive_complexity)]
     fn test_type() {
         let mut a: Float<f64> = 1.into();
         let b: Float<f64> = 2.into();
@@ -179,6 +340,12 @@ mod test {
         assert_eq!(a * 2i64, 2);
         assert_eq!(a / 2i64, 0.5);
         assert_eq!(a % 2i64, 1);
+
+        assert_eq!(1i64 + b, 3);
+        assert_eq!(1i64 - b, -1);
+        assert_eq!(1i64 * b, 2);
+        assert_eq!(1i64 / b, 0.5);
+        assert_eq!(1i64 % b, 1);
 
         a += b;
         assert_eq!(a, 3);
