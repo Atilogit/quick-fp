@@ -41,7 +41,11 @@ where
     T: Clone + num_traits::NumCast,
 {
     fn eq(&self, other: &T) -> bool {
-        self.0.eq(&num_traits::cast(other.clone()).unwrap())
+        if let Some(other) = num_traits::cast(other.clone()) {
+            self.0.eq(&other)
+        } else {
+            false
+        }
     }
 }
 
@@ -54,13 +58,11 @@ where
     T: Clone + num_traits::NumCast,
 {
     fn partial_cmp(&self, other: &T) -> Option<std::cmp::Ordering> {
-        self.0
-            .partial_cmp(&num_traits::cast(other.clone()).unwrap())
+        self.0.partial_cmp(&num_traits::cast(other.clone())?)
     }
 }
 
 #[cfg(feature = "ord")]
-#[allow(clippy::derive_ord_xor_partial_ord)]
 impl<F> Ord for Float<F>
 where
     F: num_traits::NumCast + Clone + PartialOrd,
@@ -73,6 +75,8 @@ where
 // num_traits::Bounded is intentionally not implemented for Float<F>
 // to avoid the From<Float<T>> for Float<F> implementation which would conflict
 // with the standard library.
+//
+// This implementation is infallible because num_traits::cast never errors when casting to a float.
 #[allow(clippy::fallible_impl_from)]
 impl<T, F> From<T> for Float<F>
 where

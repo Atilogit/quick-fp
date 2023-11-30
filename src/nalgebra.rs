@@ -44,14 +44,7 @@ where
 }
 
 impl<F> Field for Float<F> where
-    F: num_traits::ToPrimitive
-        + Copy
-        + PartialEq
-        + num_traits::One
-        + num_traits::Zero
-        + num_traits::Num
-        + num_traits::NumCast
-        + std::ops::Neg<Output = F>
+    F: Copy + num_traits::Num + num_traits::NumCast + std::ops::Neg<Output = F>
 {
 }
 
@@ -60,13 +53,8 @@ where
     F: 'static
         + Send
         + Sync
-        + Copy
-        + Clone
         + approx::UlpsEq<Epsilon = F>
         + approx::RelativeEq
-        + num_traits::ToPrimitive
-        + num_traits::One
-        + num_traits::Zero
         + num_traits::Signed
         + num_traits::Float
         + num_traits::FromPrimitive
@@ -175,15 +163,11 @@ where
 impl<F> ComplexField for Float<F>
 where
     F: 'static
-        + Sync
-        + Copy
-        + Clone
         + Send
+        + Sync
+        + Clone
         + approx::UlpsEq<Epsilon = F>
         + approx::RelativeEq
-        + num_traits::ToPrimitive
-        + num_traits::One
-        + num_traits::Zero
         + num_traits::Signed
         + num_traits::Float
         + num_traits::FromPrimitive

@@ -2,7 +2,7 @@ use crate::Float;
 
 impl<F> approx::UlpsEq for Float<F>
 where
-    F: approx::UlpsEq<Epsilon = F> + num_traits::ToPrimitive + Clone + num_traits::NumCast,
+    F: approx::UlpsEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     fn default_max_ulps() -> u32 {
         F::default_max_ulps()
@@ -15,7 +15,7 @@ where
 
 impl<F> approx::AbsDiffEq for Float<F>
 where
-    F: approx::AbsDiffEq<Epsilon = F> + num_traits::ToPrimitive + Clone + num_traits::NumCast,
+    F: approx::AbsDiffEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     type Epsilon = Self;
 
@@ -30,7 +30,7 @@ where
 
 impl<F> approx::RelativeEq for Float<F>
 where
-    F: approx::RelativeEq<Epsilon = F> + num_traits::ToPrimitive + Clone + num_traits::NumCast,
+    F: approx::RelativeEq<Epsilon = F> + Clone + num_traits::NumCast,
 {
     fn default_max_relative() -> Self::Epsilon {
         Self(F::default_max_relative())

@@ -13,7 +13,7 @@ where
     }
 }
 
-impl<F> num_traits::identities::One for Float<F>
+impl<F> num_traits::One for Float<F>
 where
     F: Copy + num_traits::One,
 {
@@ -24,13 +24,7 @@ where
 
 impl<F> num_traits::Signed for Float<F>
 where
-    F: num_traits::ToPrimitive
-        + Copy
-        + PartialEq
-        + num_traits::One
-        + num_traits::Zero
-        + num_traits::Signed
-        + num_traits::NumCast,
+    F: Copy + num_traits::Signed + num_traits::NumCast,
 {
     fn abs(&self) -> Self {
         Self(self.0.abs())
@@ -58,12 +52,7 @@ where
 
 impl<F> num_traits::Float for Float<F>
 where
-    F: Copy
-        + num_traits::ToPrimitive
-        + PartialEq
-        + num_traits::One
-        + num_traits::Zero
-        + num_traits::Float,
+    F: num_traits::Zero + num_traits::Float,
 {
     fn nan() -> Self {
         Self(F::nan())
@@ -292,13 +281,7 @@ where
 
 impl<F> num_traits::Num for Float<F>
 where
-    F: num_traits::ToPrimitive
-        + Copy
-        + PartialEq
-        + num_traits::One
-        + num_traits::Zero
-        + num_traits::Num
-        + num_traits::NumCast,
+    F: Copy + PartialEq + num_traits::Num + num_traits::NumCast,
 {
     type FromStrRadixErr = <F as num_traits::Num>::FromStrRadixErr;
 
@@ -309,7 +292,7 @@ where
 
 impl<F> num_traits::NumCast for Float<F>
 where
-    F: num_traits::ToPrimitive + num_traits::NumCast + Clone,
+    F: num_traits::NumCast + Clone,
 {
     fn from<T: num_traits::ToPrimitive>(n: T) -> Option<Self> {
         num_traits::NumCast::from(n).map(Self)
