@@ -4,7 +4,7 @@
 mod approx;
 #[cfg(feature = "nalgebra")]
 mod nalgebra;
-mod num_traits;
+mod num;
 mod ops;
 #[cfg(feature = "simba")]
 mod simba;
