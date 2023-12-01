@@ -17,16 +17,16 @@ macro_rules! simba_impl {
                 }
             }
 
-            impl simba::scalar::SubsetOf<Float<Self>> for $ty {
-                fn to_superset(&self) -> Float<Self> {
-                    Float(*self)
+            impl simba::scalar::SubsetOf<Float<$ty>> for f64 {
+                fn to_superset(&self) -> Float<$ty> {
+                    (*self).into()
                 }
 
-                fn from_superset_unchecked(superset: &Float<Self>) -> Self {
-                    superset.0
+                fn from_superset_unchecked(superset: &Float<$ty>) -> f64 {
+                    superset.0 as f64
                 }
 
-                fn is_in_subset(_superset: &Float<Self>) -> bool {
+                fn is_in_subset(_superset: &Float<$ty>) -> bool {
                     true
                 }
             }
@@ -49,4 +49,4 @@ macro_rules! simba_impl {
     };
 }
 
-simba_impl!(f32, f64, i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
+simba_impl!(f32, f64);
